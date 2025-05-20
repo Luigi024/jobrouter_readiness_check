@@ -49,28 +49,42 @@
     <h1>Ihre Auswertung</h1>
     <div class="score-box">
       <p><strong>Score:</strong> <span id="score">-</span></p>
-      <p><strong>Empfehlung:</strong> <span id="empfehlung">-</span></p>
+      <p><strong>Empfehlung:</strong> <span id="empfehlung">-</span></p><p><strong><span id="version"></span></strong></p>
     </div>
     <a class="cta" href="https://meetings-eu1.hubspot.com/luigi-lopez">Jetzt Beratung buchen</a>
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const score = parseInt(params.get('score')) || 0;
-    document.getElementById('score').textContent = score + ' von 25 Punkten';
+    const urlParams = new URLSearchParams(window.location.search);
+    const score = parseInt(urlParams.get("score"));
+    const budgetAntwort = parseInt(urlParams.get("budget"));
+    const userAntwort = parseInt(urlParams.get("user"));
 
     let empfehlung = "-";
-    if (score <= 10) {
-      empfehlung = "Ihr Unternehmen befindet sich noch am Anfang der digitalen Transformation. Es besteht großes Potenzial zur Digitalisierung.";
-    } else if (score <= 17) {
-      empfehlung = "Ihr Unternehmen hat erste Schritte unternommen. Es lohnt sich, gezielt in Prozessoptimierung zu investieren.";
-    } else if (score <= 22) {
-      empfehlung = "Ihr Unternehmen ist solide digital aufgestellt. Weitere Automatisierung ist möglich.";
+    if (score <= 15) {
+      empfehlung = "Digitalisierung steht noch ganz am Anfang. Es besteht großer Handlungsbedarf in den Bereichen IT, Tools und Strategie.";
+    } else if (score <= 27) {
+      empfehlung = "Gute Ansätze erkennbar. Sie haben begonnen, digital zu denken – jetzt braucht es konkrete Maßnahmen und Investitionen.";
+    } else if (score <= 36) {
+      empfehlung = "Solide digitale Basis. Ihre Organisation hat bereits Struktur – durch gezielte Automatisierung und Integration können Sie Ihre Effizienz steigern.";
     } else {
-      empfehlung = "Ihr Unternehmen ist hervorragend digitalisiert. Nutzen Sie diesen Vorsprung!";
+      empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung, um datengetrieben, automatisiert und skalierbar zu agieren.";
     }
 
-    document.getElementById('empfehlung').textContent = empfehlung;
-  </script>
+    let version = "-";
+    if (budgetAntwort === 0 || budgetAntwort === 1) {
+      version = "Keine passende JobRouter®-Edition (Budget zu gering)";
+    } else if (budgetAntwort === 2) {
+      version = (userAntwort === 0 || userAntwort === 1) ? "JobRouter® Starter oder Advanced" : "Nicht empfohlen (Nutzerzahl zu hoch)";
+    } else if (budgetAntwort === 3) {
+      version = (userAntwort === 0) ? "JobRouter® Advanced" : "JobRouter® Advanced oder Premium";
+    } else if (budgetAntwort === 4) {
+      version = "JobRouter® Premium";
+    }
+
+    document.getElementById("score").textContent = score + " von 50 Punkten";
+    document.getElementById("empfehlung").textContent = empfehlung;
+    document.getElementById("version").textContent = "Empfohlene JobRouter®-Edition: " + version;
+</script>
 </body>
 </html>
