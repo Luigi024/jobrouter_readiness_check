@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -51,11 +52,10 @@
   </div>
 
   <script>
-    let frage = 1;
+    let frage = 0;
     let readinessScore = 0;
+    const antworten = [];
 
-    
-    
     const fragen = [
       {text: "Wie stark sind Ihre internen Prozesse digital unterstützt?", options: ["Gar nicht", "Wenig", "Teils-teils", "Großteils", "Vollständig"]},
       {text: "Wie werden Dokumente aktuell verarbeitet?", options: ["Papierform", "Teilweise digital", "Scans unstrukturiert", "Archiviert", "Automatisiert & durchsuchbar"]},
@@ -69,39 +69,42 @@
       {text: "Wie viele Mitarbeitende arbeiten in Ihrem Unternehmen?", options: ["0–50", "50–300", "300+"]}
     ];
 
-
-
     function renderFrage() {
-      if (frage > fragen.length) {
-        let empfehlung = "";
-        if (readinessScore <= 10) empfehlung = "Großes Potenzial zur Digitalisierung.";
-        else if (readinessScore <= 17) empfehlung = "Guter Start – vertiefen Sie Ihre Prozesse.";
-        else if (readinessScore <= 22) empfehlung = "Solide aufgestellt, weiter optimieren.";
-        else empfehlung = "Sehr hoher Digitalisierungsgrad.";
-
+      if (frage >= fragen.length) {
+        const score = antworten.reduce((sum, val) => sum + val, 0);
         const params = new URLSearchParams({
-          score: readinessScore,
-          empfehlung: empfehlung
+          score: score,
+          budget: antworten[8],
+          user: antworten[9]
         });
-
         window.location.href = "auswertung.html?" + params.toString();
         return;
       }
 
-      const f = fragen[frage - 1];
-      let html = `<h3>${frage}. ${f.text}</h3>`;
+      const f = fragen[frage];
+      let html = `<h3>${frage + 1}. ${f.text}</h3>`;
       f.options.forEach((opt, i) => {
-        html += `<label><input type="radio" name="antwort" value="${i + 1}"> ${opt}</label>`;
+        const checked = antworten[frage] === i + 1 ? 'checked' : '';
+        html += `<label><input type="radio" name="antwort" value="${i + 1}" ${checked}> ${opt}</label>`;
       });
-      html += `<button type="button" onclick="naechsteFrage()">Weiter</button>`;
+      html += `<div style="margin-top: 20px;">`;
+      if (frage > 0) {
+        html += `<button type="button" onclick="zurueck()">Zurück</button> `;
+      }
+      html += `<button type="button" onclick="weiter()">Weiter</button></div>`;
       document.getElementById("fragebereich").innerHTML = html;
     }
 
-    function naechsteFrage() {
+    function weiter() {
       const selected = document.querySelector('input[name="antwort"]:checked');
       if (!selected) return alert("Bitte wählen Sie eine Antwort aus.");
-      readinessScore += parseInt(selected.value);
+      antworten[frage] = parseInt(selected.value);
       frage++;
+      renderFrage();
+    }
+
+    function zurueck() {
+      if (frage > 0) frage--;
       renderFrage();
     }
 
