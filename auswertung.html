@@ -57,20 +57,20 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const score = parseInt(params.get('score')) || 0;
-    document.getElementById('score').textContent = score + ' von 45 Punkten';
+    document.getElementById('score').textContent = score + ' von 25 Punkten';
 
     let empfehlung = "-";
-    if (score <= 15) {
-      empfehlung = "Digitalisierung steht noch ganz am Anfang. Es besteht großer Handlungsbedarf in den Bereichen IT, Tools und Strategie.";
-    } else if (score <= 27) {
-      empfehlung = "Gute Ansätze erkennbar. Sie haben begonnen, digital zu denken – jetzt braucht es konkrete Maßnahmen und Investitionen.";
-    } else if (score <= 36) {
-      empfehlung = "Solide digitale Basis. Ihre Organisation hat bereits Struktur – durch gezielte Automatisierung und Integration können Sie Ihre Effizienz steigern.";
+    if (score <= 10) {
+      empfehlung = "Ihr Unternehmen befindet sich noch am Anfang der digitalen Transformation. Es besteht großes Potenzial zur Digitalisierung.";
+    } else if (score <= 17) {
+      empfehlung = "Ihr Unternehmen hat erste Schritte unternommen. Es lohnt sich, gezielt in Prozessoptimierung zu investieren.";
+    } else if (score <= 22) {
+      empfehlung = "Ihr Unternehmen ist solide digital aufgestellt. Weitere Automatisierung ist möglich.";
     } else {
-      empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung, um datengetrieben, automatisiert und skalierbar zu agieren.";
+      empfehlung = "Ihr Unternehmen ist hervorragend digitalisiert. Nutzen Sie diesen Vorsprung!";
     }
 
     document.getElementById('empfehlung').textContent = empfehlung;
-</script>
+  </script>
 </body>
 </html>

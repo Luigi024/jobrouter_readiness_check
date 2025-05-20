@@ -55,6 +55,7 @@
     let readinessScore = 0;
 
     
+    
     const fragen = [
       {text: "Wie stark sind Ihre internen Prozesse digital unterstützt?", options: ["Gar nicht", "Wenig", "Teils-teils", "Großteils", "Vollständig"]},
       {text: "Wie werden Dokumente aktuell verarbeitet?", options: ["Papierform", "Teilweise digital", "Scans unstrukturiert", "Archiviert", "Automatisiert & durchsuchbar"]},
@@ -64,8 +65,10 @@
       {text: "Wie bewerten Sie Ihre aktuelle IT-Infrastruktur im Hinblick auf Skalierbarkeit und Modernisierung?", options: ["Veraltet, nicht erweiterbar", "Eingeschränkt modernisierbar", "Teilweise auf aktuellem Stand", "Modern, aber nicht vollständig integriert", "Modern und vollständig skalierbar"]},
       {text: "Welche Rolle spielen digitale Tools derzeit in Ihrem Tagesgeschäft?", options: ["Keine Tools im Einsatz", "Einzelne Lösungen für spezifische Aufgaben", "Teilweise integrierte Tools", "Umfassender Softwareeinsatz", "Durchgängige Systemlandschaft mit Integration"]},
       {text: "Wie klar ist die strategische Planung der Digitalisierung in Ihrem Unternehmen?", options: ["Kein Konzept vorhanden", "Erste Gedanken existieren", "Grobe Digitalstrategie formuliert", "Konkrete Roadmap vorhanden", "Klare Vision mit Maßnahmen- und Zeitplan"]},
-      {text: "Welches Budget steht aktuell für Digitalisierungsprojekte zur Verfügung?", options: ["Kein Budget vorgesehen", "Unter 5.000 €", "5.000 € bis 20.000 €", "20.000 € bis 50.000 €", "Über 50.000 €"]}
+      {text: "Welches Budget steht aktuell für Digitalisierungsprojekte zur Verfügung?", options: ["Kein Budget vorgesehen", "Unter 5.000 €", "5.000 € bis 20.000 €", "20.000 € bis 50.000 €", "Über 50.000 €"]},
+      {text: "Wie viele Mitarbeitende arbeiten in Ihrem Unternehmen?", options: ["0–50", "50–300", "300+"]}
     ];
+
 
 
     function renderFrage() {
