@@ -56,6 +56,10 @@
     <div style="margin-top: 20px;">
       <a href="index.html" class="cta">Zurück zur Startseite</a>
     </div>
+    <div style="margin-top: 10px;">
+      <a href="readiness-check.html#frage10" class="cta">Zurück zum Check</a>
+    </div>
+
   </div>
 
   </div>
@@ -66,15 +70,27 @@
     const budgetAntwort = parseInt(urlParams.get("budget"));
     const userAntwort = parseInt(urlParams.get("user"));
 
+    let multiplePunkte = 0;
+    try {
+      const antworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
+      [17, 18, 19].forEach(i => {
+        if (antworten[i] && Array.isArray(antworten[i])) {
+          multiplePunkte += antworten[i].length;
+        }
+      });
+    } catch (e) {}
+
+    const finalScore = score + multiplePunkte;
+
     let empfehlung = "-";
-    if (score <= 15) {
-      empfehlung = "Digitalisierung steht noch ganz am Anfang. Es besteht großer Handlungsbedarf in den Bereichen IT, Tools und Strategie.";
-    } else if (score <= 27) {
-      empfehlung = "Gute Ansätze erkennbar. Sie haben begonnen, digital zu denken – jetzt braucht es konkrete Maßnahmen und Investitionen.";
-    } else if (score <= 36) {
-      empfehlung = "Solide digitale Basis. Ihre Organisation hat bereits Struktur – durch gezielte Automatisierung und Integration können Sie Ihre Effizienz steigern.";
+    if (finalScore <= 20) {
+      empfehlung = "Digitalisierung steht noch ganz am Anfang. Es besteht großer Handlungsbedarf.";
+    } else if (finalScore <= 35) {
+      empfehlung = "Gute Ansätze erkennbar. Jetzt braucht es konkrete Maßnahmen und Investitionen.";
+    } else if (finalScore <= 45) {
+      empfehlung = "Solide digitale Basis. Ihre Organisation ist gut aufgestellt.";
     } else {
-      empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung, um datengetrieben, automatisiert und skalierbar zu agieren.";
+      empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung skalierbar.";
     }
 
     let version = "-";
@@ -88,7 +104,7 @@
       version = "JobRouter® Premium";
     }
 
-    document.getElementById("score").textContent = score + " von 50 Punkten";
+    document.getElementById("score").textContent = finalScore + " von ca. 60+ Punkten";
     document.getElementById("empfehlung").textContent = empfehlung;
     document.getElementById("version").textContent = "Empfohlene JobRouter®-Edition: " + version;
 </script>

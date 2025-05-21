@@ -58,7 +58,10 @@
   <script>
     let frage = 0;
     let readinessScore = 0;
-    const antworten = [];
+    
+    let antworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
+    let frage = parseInt(localStorage.getItem("readinessFrage") || "0");
+    
 
     const fragen = [
       {text: "Wie stark sind Ihre internen Prozesse digital unterstützt?", options: ["Gar nicht", "Wenig", "Teils-teils", "Großteils", "Vollständig"]},
@@ -71,7 +74,39 @@
       {text: "Wie klar ist die strategische Planung der Digitalisierung in Ihrem Unternehmen?", options: ["Kein Konzept vorhanden", "Erste Gedanken existieren", "Grobe Digitalstrategie formuliert", "Konkrete Roadmap vorhanden", "Klare Vision mit Maßnahmen- und Zeitplan"]},
       {text: "Welches Budget steht aktuell für Digitalisierungsprojekte zur Verfügung?", options: ["Kein Budget vorgesehen", "Unter 5.000 €", "5.000 € bis 20.000 €", "20.000 € bis 50.000 €", "Über 50.000 €"]},
       {text: "Wie viele Mitarbeitende arbeiten in Ihrem Unternehmen?", options: ["0–50", "50–300", "300+"]}
-    ];
+    ,
+    {text: "Was sind Ihre größten Herausforderungen bei der Digitalisierung?", type: "text"},
+    {text: "Was motiviert Sie zur Digitalisierung?", type: "text"},
+    {text: "Welche Prozesse möchten Sie digitalisieren?", type: "text"},
+    {text: "Wie werden diese Prozesse aktuell umgesetzt?", type: "text"},
+    {text: "Welche Abteilungen sind davon betroffen?", type: "text"},
+    {text: "Welche Auswirkungen haben diese Prozesse auf Effizienz oder Kosten?", type: "text"},
+
+    {text: "Wie hoch ist Ihr Belegsvolumen für OCR/KI-Erkennung?", type: "text"},
+    {text: "Wie viele Kreditorenrechnungen erhalten Sie pro Jahr?", type: "text"},
+    {text: "Wie viele Debitorenrechnungen erhalten Sie pro Jahr?", type: "text"},
+    {text: "Wie viele Baurechnungen erhalten Sie pro Jahr?", type: "text"},
+    {text: "Gibt es weitere Dokumentarten wie Lieferscheine oder Auftragsbestätigungen?", type: "text"},
+    {text: "Welche Kosten entstehen aktuell durch die manuelle Bearbeitung dieser Dokumente?", type: "text"},
+    {text: "Welche Einsparungen erwarten Sie sich durch eine Digitalisierung?", type: "text"},
+
+    {text: "Wie hoch ist die Dringlichkeit einer Lösung?", options: ["Sofort", "Kurzfristig (≤3 Monate)", "Mittelfristig (6–12 Monate)"]},
+    {text: "Wie hoch ist Ihr Leidensdruck auf einer Skala von 1 bis 10?", options: ["1","2","3","4","5","6","7","8","9","10"]},
+    {text: "Welche bestehenden Systeme im Haus sind betroffen?", type: "text"},
+
+    {text: "Welche Finanz- & Buchhaltungssysteme nutzen Sie?", options: ["DATEV", "ADDISON", "SAP", "NAVISION", "Sonstige"], multiple: true},
+    {text: "Welche DMS-Systeme sind bei Ihnen im Einsatz?", options: ["WinDream", "SharePoint", "EasyArchive", "DocuWare", "ELO", "Sonstige"], multiple: true},
+    {text: "Welche ERP- / CRM-Systeme nutzen Sie?", options: ["SAP", "MS Dynamics", "MS Navision", "RIB iTWO", "Nevaris", "Sonstige"], multiple: true},
+
+    {text: "Wie zufrieden sind Sie mit Ihren bestehenden Systemen?", options: ["1","2","3","4","5","6","7","8","9","10"]},
+    {text: "Gibt es bereits Schnittstellen zwischen Ihren Systemen?", options: ["Ja", "Nein"]},
+    {text: "Wer kümmert sich um die Systemintegration?", options: ["Internes IT-Team", "Externer Dienstleister", "Kombination", "Noch unklar"]},
+
+    {text: "Wer ist an der Entscheidungsfindung beteiligt?", type: "text"},
+    {text: "Wer ist Projektverantwortlich für Digitalisierung?", type: "text"},
+    {text: "Wann ist ein Entscheidungszeitpunkt geplant?", type: "text"},
+    {text: "Sonstige Kommentare oder nächste Schritte?", type: "text"}
+];
 
     function renderFrage() {
       if (frage >= fragen.length) {
@@ -87,7 +122,7 @@
 
       document.getElementById("frageNummer").textContent = "Frage " + (frage + 1) + " / " + fragen.length;
       const f = fragen[frage];
-      let html = `<h3>${frage + 1}. ${f.text}</h3>`;
+      let html = (frage === 9 ? `<div id="frage10"><h3>${frage + 1}. ${f.text}</h3>` : `<h3>${frage + 1}. ${f.text}</h3>`);
       f.options.forEach((opt, i) => {
         const checked = antworten[frage] === i + 1 ? 'checked' : '';
         html += `<label><input type="radio" name="antwort" value="${i + 1}" ${checked}> ${opt}</label>`;
@@ -97,13 +132,15 @@
         html += `<button type="button" onclick="zurueck()">Zurück</button> `;
       }
       html += `<button type="button" onclick="weiter()">Weiter</button></div>`;
-      document.getElementById("fragebereich").innerHTML = html;
+      document.getElementById("fragebereich").innerHTML = html + (frage === 9 ? "</div>" : "");
     }
 
     function weiter() {
       const selected = document.querySelector('input[name="antwort"]:checked');
       if (!selected) return alert("Bitte wählen Sie eine Antwort aus.");
       antworten[frage] = parseInt(selected.value);
+      localStorage.setItem("readinessAntworten", JSON.stringify(antworten));
+      localStorage.setItem("readinessFrage", frage + 1);
       frage++;
       renderFrage();
     }
