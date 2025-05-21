@@ -62,28 +62,54 @@
     </div>
   </div>
 
-  <script>
-    let savedAntworten = [];
-    try {
-      savedAntworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
-    } catch (e) {}
+  
+<script>
+  let savedAntworten = [];
+  try {
+    savedAntworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
+  } catch (e) {}
 
-    const validAntworten = savedAntworten.slice(0, 10).map(val => parseInt(val) || 0);
-    const finalScore = validAntworten.reduce((sum, val) => sum + val, 0);
+  const validAntworten = savedAntworten.slice(0, 10).map(val => parseInt(val) || 0);
+  const finalScore = validAntworten.reduce((sum, val) => sum + val, 0);
 
-    let empfehlung = "-";
-    if (finalScore <= 20) {
-      empfehlung = "Digitalisierung steht noch ganz am Anfang. Es besteht großer Handlungsbedarf.";
-    } else if (finalScore <= 35) {
-      empfehlung = "Gute Ansätze erkennbar. Jetzt braucht es konkrete Maßnahmen und Investitionen.";
-    } else if (finalScore <= 45) {
-      empfehlung = "Solide digitale Basis. Ihre Organisation ist gut aufgestellt.";
-    } else {
-      empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung skalierbar.";
-    }
+  let empfehlung = "-";
+  if (finalScore <= 20) {
+    empfehlung = "Digitalisierung steht noch ganz am Anfang. Es besteht großer Handlungsbedarf.";
+  } else if (finalScore <= 35) {
+    empfehlung = "Gute Ansätze erkennbar. Jetzt braucht es konkrete Maßnahmen und Investitionen.";
+  } else if (finalScore <= 45) {
+    empfehlung = "Solide digitale Basis. Ihre Organisation ist gut aufgestellt.";
+  } else {
+    empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung skalierbar.";
+  }
 
-    document.getElementById("score").textContent = finalScore + " von maximal 50 Punkten";
-    document.getElementById("empfehlung").textContent = empfehlung;
-  </script>
+  document.getElementById("score").textContent = finalScore + " von maximal 50 Punkten";
+  document.getElementById("empfehlung").textContent = empfehlung;
+
+  // JobRouter® Editions-Empfehlung basierend auf Useranzahl und Budget
+  const budgetAntwort = validAntworten[8]; // Frage 9: Budget
+  const userAntwort = validAntworten[9];   // Frage 10: Useranzahl
+
+  let edition = "-";
+  if (userAntwort === 0 && budgetAntwort >= 2) {
+    edition = "Starter Edition";
+  } else if (
+    (userAntwort === 0 || userAntwort === 1) &&
+    budgetAntwort >= 2 &&
+    budgetAntwort <= 4
+  ) {
+    edition = "Advanced Edition";
+  } else if (
+    userAntwort === 2 &&
+    budgetAntwort >= 4
+  ) {
+    edition = "Premium Edition";
+  }
+
+  const editionBox = document.createElement("p");
+  editionBox.innerHTML = "<strong>Empfohlene JobRouter® Edition:</strong> " + edition;
+  document.querySelector(".score-box").appendChild(editionBox);
+</script>
+
 </body>
 </html>

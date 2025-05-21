@@ -60,8 +60,19 @@
   </div>
 
   <script>
+    
     let frage = 0;
-    const antworten = [];
+    let antworten = [];
+
+    try {
+      const gespeicherteAntworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
+      if (Array.isArray(gespeicherteAntworten)) {
+        antworten = gespeicherteAntworten;
+      }
+    } catch (e) {
+      antworten = [];
+    }
+
 
     const fragen = [
       {text: "Wie stark sind Ihre internen Prozesse digital unterstützt?", options: ["Gar nicht", "Wenig", "Teils-teils", "Großteils", "Vollständig"]},
@@ -79,14 +90,20 @@
     function renderFrage() {
       if (frage >= fragen.length) {
         localStorage.setItem("readinessAntworten", JSON.stringify(antworten));
-        window.location.href = "auswertung.html";
+        const score = antworten.reduce((sum, val) => sum + val, 0);
+        const params = new URLSearchParams({
+          score: score,
+          budget: antworten[8],
+          user: antworten[9]
+        });
+        window.location.href = "auswertung.html?" + params.toString();
         return;
       }
 
       document.getElementById("frage-counter").innerText = `Frage ${frage + 1}/${fragen.length}`;
 
       const f = fragen[frage];
-      let html = `<h3 id="frage1">${frage + 1}. ${f.text}</h3>`;
+      let html = `<h3 ${frage === 0 ? "id=\"frage1\"" : ""}>${frage + 1}. ${f.text}</h3>`;
       f.options.forEach((opt, i) => {
         const checked = antworten[frage] === i + 1 ? 'checked' : '';
         html += `<label><input type="radio" name="antwort" value="${i + 1}" ${checked}> ${opt}</label>`;
