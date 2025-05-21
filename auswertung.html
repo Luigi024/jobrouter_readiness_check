@@ -112,7 +112,7 @@
 
   let edition = "-";
 
-  if (budgetAntwort === 0 || budgetAntwort === 1) {
+  if ([0, 1].includes(Number(budgetAntwort))) {
     edition = "JobRouter ist nicht die richtige Lösung für euch";
   } else if (userAntwort === 0 && budgetAntwort === 2) {
     edition = "JobRouter Starter Edition / JobRouter Advanced Edition";
