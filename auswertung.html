@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -49,38 +50,32 @@
     <h1>Ihre Auswertung</h1>
     <div class="score-box">
       <p><strong>Vielen Dank für die Teilnahme an diesem Readiness Check!</strong></p>
-<p><strong>Score:</strong> <span id="score">-</span></p>
-      <p><strong>Empfehlung:</strong> <span id="empfehlung">-</span></p><p><strong><span id="version"></span></strong></p>
+      <p><strong>Score:</strong> <span id="score">-</span></p>
+      <p><strong>Empfehlung:</strong> <span id="empfehlung">-</span></p>
+      <p><strong><span id="version"></span></strong></p>
     </div>
     <a class="cta" href="https://meetings-eu1.hubspot.com/luigi-lopez">Jetzt Beratung buchen</a>
     <div style="margin-top: 20px;">
       <a href="index.html" class="cta">Zurück zur Startseite</a>
     </div>
     <div style="margin-top: 10px;">
-      <a href="readiness-check.html#frage-1" class="cta">Zurück zum Check</a>
+      <a href="readiness-check-mit-anker.html#frage1" class="cta">Zurück zum Check</a>
     </div>
-
-  </div>
-
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const score = parseInt(urlParams.get("score"));
-    const budgetAntwort = parseInt(urlParams.get("budget"));
-    const userAntwort = parseInt(urlParams.get("user"));
+    const score = parseInt(urlParams.get("score")) || 0;
+    const budgetAntwort = parseInt(urlParams.get("budget")) || 0;
+    const userAntwort = parseInt(urlParams.get("user")) || 0;
 
-    let multiplePunkte = 0;
+    let savedAntworten = [];
     try {
-      const antworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
-      [17, 18, 19].forEach(i => {
-        if (antworten[i] && Array.isArray(antworten[i])) {
-          multiplePunkte += antworten[i].length;
-        }
-      });
+      savedAntworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
     } catch (e) {}
 
-    const finalScore = score + multiplePunkte;
+    const validAntworten = savedAntworten.slice(0, 10).map(val => parseInt(val) || 0);
+    const finalScore = validAntworten.reduce((sum, val) => sum + val, 0) + score;
 
     let empfehlung = "-";
     if (finalScore <= 20) {
@@ -104,9 +99,9 @@
       version = "JobRouter® Premium";
     }
 
-    document.getElementById("score").textContent = finalScore + " von ca. 60+ Punkten";
+    document.getElementById("score").textContent = finalScore + " von ca. 50 Punkten";
     document.getElementById("empfehlung").textContent = empfehlung;
     document.getElementById("version").textContent = "Empfohlene JobRouter®-Edition: " + version;
-</script>
+  </script>
 </body>
 </html>
