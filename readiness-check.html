@@ -46,8 +46,12 @@
 <body>
   <div class="container">
     <h2>Readiness-Check</h2>
+    <div style="text-align: right; font-weight: bold;" id="frageNummer"></div>
     <form id="readiness-check">
       <div id="fragebereich"></div>
+      <div style="text-align: right; margin-top: 30px;">
+        <a href="index.html" style="padding: 10px 20px; background: #ffd200; color: black; border-radius: 6px; text-decoration: none; font-weight: bold;">Zurück zur Startseite</a>
+      </div>
     </form>
   </div>
 
@@ -81,6 +85,7 @@
         return;
       }
 
+      document.getElementById("frageNummer").textContent = "Frage " + (frage + 1) + " / " + fragen.length;
       const f = fragen[frage];
       let html = `<h3>${frage + 1}. ${f.text}</h3>`;
       f.options.forEach((opt, i) => {
