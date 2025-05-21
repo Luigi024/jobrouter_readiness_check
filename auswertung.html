@@ -90,20 +90,17 @@
   const budgetAntwort = validAntworten[8]; // Frage 9: Budget
   const userAntwort = validAntworten[9];   // Frage 10: Useranzahl
 
+  // Neue JobRouter® Editions-Empfehlung basierend auf Useranzahl und Budget
   let edition = "-";
-  if (userAntwort === 0 && budgetAntwort >= 2) {
-    edition = "Starter Edition";
-  } else if (
-    (userAntwort === 0 || userAntwort === 1) &&
-    budgetAntwort >= 2 &&
-    budgetAntwort <= 4
-  ) {
-    edition = "Advanced Edition";
-  } else if (
-    userAntwort === 2 &&
-    budgetAntwort >= 4
-  ) {
-    edition = "Premium Edition";
+
+  if (budgetAntwort === 0 || budgetAntwort === 1) {
+    edition = "JobRouter ist nicht die richtige Lösung für euch";
+  } else if (userAntwort === 0 && budgetAntwort === 2) {
+    edition = "JobRouter Starter Edition / JobRouter Advanced Edition";
+  } else if (userAntwort === 1 && (budgetAntwort === 2 || budgetAntwort === 3)) {
+    edition = "JobRouter Advanced Edition / JobRouter Premium";
+  } else if (userAntwort === 2 && (budgetAntwort === 2 || budgetAntwort === 3 || budgetAntwort === 4)) {
+    edition = "JobRouter Advanced Edition / JobRouter Premium";
   }
 
   const editionBox = document.createElement("p");
