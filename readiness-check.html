@@ -79,13 +79,7 @@
     function renderFrage() {
       if (frage >= fragen.length) {
         localStorage.setItem("readinessAntworten", JSON.stringify(antworten));
-        const score = antworten.reduce((sum, val) => sum + val, 0);
-        const params = new URLSearchParams({
-          score: score,
-          budget: antworten[8],
-          user: antworten[9]
-        });
-        window.location.href = "auswertung.html?" + params.toString();
+        window.location.href = "auswertung-final.html";
         return;
       }
 

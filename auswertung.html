@@ -52,30 +52,24 @@
       <p><strong>Vielen Dank für die Teilnahme an diesem Readiness Check!</strong></p>
       <p><strong>Score:</strong> <span id="score">-</span></p>
       <p><strong>Empfehlung:</strong> <span id="empfehlung">-</span></p>
-      <p><strong><span id="version"></span></strong></p>
     </div>
     <a class="cta" href="https://meetings-eu1.hubspot.com/luigi-lopez">Jetzt Beratung buchen</a>
     <div style="margin-top: 20px;">
       <a href="index.html" class="cta">Zurück zur Startseite</a>
     </div>
     <div style="margin-top: 10px;">
-      <a href="readiness-check-mit-anker.html#frage1" class="cta">Zurück zum Check</a>
+      <a href="readiness-check.html" class="cta">Zurück zum Check</a>
     </div>
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const score = parseInt(urlParams.get("score")) || 0;
-    const budgetAntwort = parseInt(urlParams.get("budget")) || 0;
-    const userAntwort = parseInt(urlParams.get("user")) || 0;
-
     let savedAntworten = [];
     try {
       savedAntworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
     } catch (e) {}
 
     const validAntworten = savedAntworten.slice(0, 10).map(val => parseInt(val) || 0);
-    const finalScore = validAntworten.reduce((sum, val) => sum + val, 0) + score;
+    const finalScore = validAntworten.reduce((sum, val) => sum + val, 0);
 
     let empfehlung = "-";
     if (finalScore <= 20) {
@@ -88,20 +82,8 @@
       empfehlung = "Vorreiter in Sachen Digitalisierung. Nutzen Sie Ihren Vorsprung skalierbar.";
     }
 
-    let version = "-";
-    if (budgetAntwort === 0 || budgetAntwort === 1) {
-      version = "Keine passende JobRouter®-Edition (Budget zu gering)";
-    } else if (budgetAntwort === 2) {
-      version = (userAntwort === 0 || userAntwort === 1) ? "JobRouter® Starter oder Advanced" : "Nicht empfohlen (Nutzerzahl zu hoch)";
-    } else if (budgetAntwort === 3) {
-      version = (userAntwort === 0) ? "JobRouter® Advanced" : "JobRouter® Advanced oder Premium";
-    } else if (budgetAntwort === 4) {
-      version = "JobRouter® Premium";
-    }
-
-    document.getElementById("score").textContent = finalScore + " von ca. 50 Punkten";
+    document.getElementById("score").textContent = finalScore + " von maximal 50 Punkten";
     document.getElementById("empfehlung").textContent = empfehlung;
-    document.getElementById("version").textContent = "Empfohlene JobRouter®-Edition: " + version;
   </script>
 </body>
 </html>
