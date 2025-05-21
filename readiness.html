@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Readiness-Check starten</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: #f6f6f6;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #f6a800;
+      text-align: center;
+    }
+    h3 {
+      margin-top: 30px;
+    }
+    label {
+      display: block;
+      margin: 10px 0;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ffd200;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Readiness-Check</h2>
+    <div style="text-align: right; font-weight: bold;" id="frageNummer"></div>
+    <form id="readiness-check">
+      <div id="fragebereich"></div>
+      <div style="text-align: right; margin-top: 30px;">
+        <a href="index.html" style="padding: 10px 20px; background: #ffd200; color: black; border-radius: 6px; text-decoration: none; font-weight: bold;">Zurück zur Startseite</a>
+      </div>
+    </form>
+  </div>
+
+  
+<script>
+let frage = parseInt(localStorage.getItem("readinessFrage") || "0");
+const antworten = JSON.parse(localStorage.getItem("readinessAntworten") || "[]");
+
+const fragen = [
+  {text: "Wie stark sind Ihre internen Prozesse digital unterstützt?", options: ["Gar nicht", "Wenig", "Teils-teils", "Großteils", "Vollständig"]},
+  {text: "Wie werden Dokumente aktuell verarbeitet?", options: ["Papierform", "Teilweise digital", "Scans unstrukturiert", "Archiviert", "Automatisiert & durchsuchbar"]},
+  {text: "Wie ist der Automatisierungsgrad Ihrer Abläufe?", options: ["Keine", "Einzelaufgaben", "Teilautomatisierung", "Großteils automatisiert", "Nahezu vollständig"]},
+  {text: "Wie gehen Sie mit wiederkehrenden Aufgaben um?", options: ["Manuell", "Teilweise automatisiert", "Mit Vorlagen", "Standardisierte Workflows", "Vollständig automatisiert"]},
+  {text: "Wie stark sind Ihre Mitarbeitenden eingebunden?", options: ["Gar nicht", "Einige digital", "Mehrheit digital", "Digitale Abläufe etabliert", "Integriert & teamübergreifend"]},
+  {text: "Wie bewerten Sie Ihre aktuelle IT-Infrastruktur im Hinblick auf Skalierbarkeit und Modernisierung?", options: ["Veraltet, nicht erweiterbar", "Eingeschränkt modernisierbar", "Teilweise auf aktuellem Stand", "Modern, aber nicht vollständig integriert", "Modern und vollständig skalierbar"]},
+  {text: "Welche Rolle spielen digitale Tools derzeit in Ihrem Tagesgeschäft?", options: ["Keine Tools im Einsatz", "Einzelne Lösungen für spezifische Aufgaben", "Teilweise integrierte Tools", "Umfassender Softwareeinsatz", "Durchgängige Systemlandschaft mit Integration"]},
+  {text: "Wie klar ist die strategische Planung der Digitalisierung in Ihrem Unternehmen?", options: ["Kein Konzept vorhanden", "Erste Gedanken existieren", "Grobe Digitalstrategie formuliert", "Konkrete Roadmap vorhanden", "Klare Vision mit Maßnahmen- und Zeitplan"]},
+  {text: "Welches Budget steht aktuell für Digitalisierungsprojekte zur Verfügung?", options: ["Kein Budget vorgesehen", "Unter 5.000 €", "5.000 € bis 20.000 €", "20.000 € bis 50.000 €", "Über 50.000 €"]},
+  {text: "Wie viele Mitarbeitende arbeiten in Ihrem Unternehmen?", options: ["0–50", "50–300", "300+"]}
+];
+
+function renderFrage() {
+  if (frage >= fragen.length) {
+    const score = antworten.reduce((sum, val) => sum + val, 0);
+    const params = new URLSearchParams({
+      score: score,
+      budget: antworten[8],
+      user: antworten[9]
+    });
+    window.location.href = "auswertung.html?" + params.toString();
+    return;
+  }
+
+  document.getElementById("frageNummer").textContent = "Frage " + (frage + 1) + " / " + fragen.length;
+  const f = fragen[frage];
+  let html = `<h3 id="frage-1">${frage + 1}. ${f.text}</h3>`;
+  f.options.forEach((opt, i) => {
+    const checked = antworten[frage] === i + 1 ? 'checked' : '';
+    html += `<label><input type="radio" name="antwort" value="${i + 1}" ${checked}> ${opt}</label>`;
+  });
+  html += `<div style="margin-top: 20px;">`;
+  if (frage > 0) {
+    html += `<button type="button" onclick="zurueck()">Zurück</button> `;
+  }
+  html += `<button type="button" onclick="weiter()">Weiter</button></div>`;
+  document.getElementById("fragebereich").innerHTML = html;
+}
+
+function weiter() {
+  const selected = document.querySelector('input[name="antwort"]:checked');
+  if (!selected) return alert("Bitte wählen Sie eine Antwort aus.");
+  antworten[frage] = parseInt(selected.value);
+  localStorage.setItem("readinessAntworten", JSON.stringify(antworten));
+  localStorage.setItem("readinessFrage", frage + 1);
+  frage++;
+  renderFrage();
+}
+
+function zurueck() {
+  if (frage > 0) frage--;
+  renderFrage();
+}
+
+renderFrage();
+    }
+
+    function zurueck() {
+      if (frage > 0) frage--;
+      renderFrage();
+    }
+
+    renderFrage();
+  </script>
+</body>
+</html>
