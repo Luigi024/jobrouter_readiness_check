@@ -108,18 +108,22 @@
 
   let edition = "-";
 
-  if ([0, 1].includes(Number(budgetAntwort))) {
+  if (budgetAntwort <= 1) {
     edition = "JobRouter ist nicht die richtige Lösung für euch";
-  } else if (userAntwort === 0) {
-    if (budgetAntwort === 2) {
-      edition = "JobRouter Starter Edition / JobRouter Advanced Edition";
-    } else if (budgetAntwort >= 3) {
-      edition = "JobRouter Advanced Edition";
-    }
-  } else if (userAntwort === 1 && (budgetAntwort === 3 || budgetAntwort === 4)) {
-    edition = "JobRouter Advanced Edition / JobRouter Premium";
-  } else if (userAntwort === 2 && (budgetAntwort === 3 || budgetAntwort === 4)) {
-    edition = "JobRouter Advanced Edition / JobRouter Premium";
+  } else if (budgetAntwort === 2 && userAntwort === 0) {
+    edition = "JobRouter Starter Edition";
+  } else if (
+    (userAntwort === 0 || userAntwort === 1) &&
+    (budgetAntwort === 2 || budgetAntwort === 3)
+  ) {
+    edition = "JobRouter Advanced Edition";
+  } else if (
+    (userAntwort === 1 || userAntwort === 2) &&
+    (budgetAntwort === 3 || budgetAntwort === 4)
+  ) {
+    edition = "JobRouter Premium Edition";
+  } else {
+    edition = "JobRouter Advanced Edition";
   }
 
   const editionBox = document.createElement("p");
