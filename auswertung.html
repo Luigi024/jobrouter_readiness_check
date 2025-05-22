@@ -43,7 +43,6 @@
       font-weight: 600;
       text-decoration: none;
     }
-  
     @media (max-width: 600px) {
       .container {
         padding: 20px;
@@ -62,7 +61,6 @@
         font-size: 1em;
       }
     }
-
   </style>
 </head>
 <body>
@@ -82,7 +80,6 @@
     </div>
   </div>
 
-  
 <script>
   let savedAntworten = [];
   try {
@@ -106,16 +103,19 @@
   document.getElementById("score").textContent = finalScore + " von maximal 50 Punkten";
   document.getElementById("empfehlung").textContent = empfehlung;
 
-  // JobRouter® Editions-Empfehlung basierend auf Useranzahl und Budget
-  const budgetAntwort = validAntworten[8]; // Frage 9: Budget
-  const userAntwort = validAntworten[9];   // Frage 10: Useranzahl
+  const budgetAntwort = validAntworten[8];
+  const userAntwort = validAntworten[9];
 
   let edition = "-";
 
   if ([0, 1].includes(Number(budgetAntwort))) {
     edition = "JobRouter ist nicht die richtige Lösung für euch";
-  } else if (userAntwort === 0 && budgetAntwort === 2) {
-    edition = "JobRouter Starter Edition / JobRouter Advanced Edition";
+  } else if (userAntwort === 0) {
+    if (budgetAntwort === 2) {
+      edition = "JobRouter Starter Edition / JobRouter Advanced Edition";
+    } else if (budgetAntwort >= 3) {
+      edition = "JobRouter Advanced Edition";
+    }
   } else if (userAntwort === 1 && (budgetAntwort === 3 || budgetAntwort === 4)) {
     edition = "JobRouter Advanced Edition / JobRouter Premium";
   } else if (userAntwort === 2 && (budgetAntwort === 3 || budgetAntwort === 4)) {
